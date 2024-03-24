@@ -1,8 +1,63 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/userSlice.js";
 
 const Login = () => {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { loading, error } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (error != null) {
+      toast.error(error);
+    }
+  }, [error]);
+  function handleInputErrors({ username, password }) {
+    if (!username || !password) {
+      toast.error("Please fill in all fields");
+      return false;
+    }
+    return true;
+  }
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const success = handleInputErrors({
+      username,
+      password,
+    });
+    if (!success) return;
+    dispatch(signInStart());
+    try {
+      const res = await fetch(`http://localhost:5000/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.error) {
+        console.log(data.error);
+        dispatch(signInFailure(data.error));
+        return;
+      }
+      dispatch(signInSuccess(data));
+    } catch (err) {
+      console.log(err);
+      dispatch(signInFailure(err));
+      return;
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
@@ -12,7 +67,7 @@ const Login = () => {
           <span className="text-blue-500"> ChatApp</span>
         </h1>
 
-        <form>
+        <form onSubmit={handleFormSubmit}>
           <div>
             <label className="label p-2">
               <span className="text-base label-text">Username</span>

@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
-  console.log(req.body);
+  console.log("User is trying to Register");
   try {
     const { fullName, username, password, confirmPassword, gender } = req.body;
 
@@ -55,8 +55,9 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
+  console.log("User is trying to log In");
+
   try {
-	
     const { username, password } = req.body;
     const user = await User.findOne({ username });
     const isPasswordCorrect = await bcrypt.compare(
@@ -83,6 +84,7 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
+  console.log("User is trying to logout");
   try {
     res.cookie("jwt", "", { maxAge: 0 });
     res.status(200).json({ message: "Logged out successfully" });
