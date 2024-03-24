@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
+  console.log(req.body);
   try {
     const { fullName, username, password, confirmPassword, gender } = req.body;
 
