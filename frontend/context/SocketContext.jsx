@@ -8,15 +8,15 @@ export const useSocketContext = () => {
   return useContext(SocketContext);
 };
 
-export  const SocketContextProvider = ({ children }) => {
+export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { userData } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (userData) {
-      console.log("Trying to connect a user")
-      const socket = io("http://localhost:5000", {
+      console.log("Trying to connect a user");
+      const socket = io("https://chat-ease-qx9h.onrender.com", {
         query: {
           userId: userData._id,
         },
