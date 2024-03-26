@@ -13,7 +13,7 @@ const SearchInput = () => {
 
   const getConversations = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/users`, {
+      const res = await fetch(`https://chat-ease-qx9h.onrender.com/api/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
