@@ -4,6 +4,7 @@ import { setUserMessages } from "../../redux/messagesSlice.js";
 import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 import MessageSkeleton from "../MessageSkeletion";
+import { useSocketContext } from "../../../context/SocketContext.jsx";
 
 const Messages = () => {
   const dispatch = useDispatch();
@@ -15,9 +16,19 @@ const Messages = () => {
   const [loading, setLoading] = useState(false);
   const lastMessageRef = useRef();
 
+  const { socket } = useSocketContext();
+
+  useEffect(() => {
+    socket?.on("newMessage", (newMessage) => {
+      newMessage.shake=true;
+      dispatch(setUserMessages([...messages, newMessage]));
+    });
+    return () => socket?.off("newMessage");
+  },[socket,messages]);
+
   useEffect(() => {
     setTimeout(() => {
-      console.log("Selected COn")
+      console.log("Selected COn");
 
       lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
@@ -42,6 +53,7 @@ const Messages = () => {
         if (data.error) throw new Error(data.error);
         dispatch(setUserMessages(data));
       } catch (error) {
+        console.log(error);
         toast.error(error.message);
       } finally {
         setLoading(false);
@@ -61,7 +73,9 @@ const Messages = () => {
         ))}
       {loading && [...Array(3)].map((_, idx) => <MessageSkeleton key={idx} />)}
       {!loading && messages.length === 0 && (
-        <p className="text-center text-white" >Send a message to start the conversation</p>
+        <p className="text-center text-white">
+          Send a message to start the conversation
+        </p>
       )}
     </div>
   );
