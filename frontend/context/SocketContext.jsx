@@ -16,7 +16,7 @@ export  const SocketContextProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       console.log("Trying to connect a user")
-      const socket = io("https://chat-ease-qx9h.onrender.com/", {
+      const socket = io("http://localhost:5000", {
         query: {
           userId: userData._id,
         },

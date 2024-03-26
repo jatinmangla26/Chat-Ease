@@ -14,6 +14,7 @@ const io = new Server(server, {
 });
 
 export const getReceiverSocketId = (receiverId) => {
+  console.log("Receiving socket if dor receiverId",receiverId)
   return userSocketMap[receiverId];
 };
 

@@ -19,7 +19,9 @@ const Messages = () => {
   const { socket } = useSocketContext();
 
   useEffect(() => {
+    console.log("Runngin socket use Effect")
     socket?.on("newMessage", (newMessage) => {
+      console.log(newMessage);
       newMessage.shake=true;
       dispatch(setUserMessages([...messages, newMessage]));
     });
