@@ -6,13 +6,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { setSelectedConversation } from "../../redux/conversationSlice.js";
 const MessageContainer = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    // cleanup function (unmounts)
-    return () => dispatch(setSelectedConversation(null));
-  }, [setSelectedConversation]);
   const { selectedConversation } = useSelector(
     (state) => state.selectedConversation
   );
+  useEffect(() => {
+    // cleanup function (unmounts)
+    return () => {
+      console.log("Clean Up")
+      dispatch(setSelectedConversation(null));
+    };
+  }, []);
 
   const noChatSelected = selectedConversation ? false : true;
 
@@ -25,7 +28,9 @@ const MessageContainer = () => {
           {/* Header */}
           <div className="bg-slate-500 px-4 py-2 mb-2">
             <span className="label-text">To:</span>{" "}
-            <span className="text-gray-900 font-bold">{selectedConversation.fullName}</span>
+            <span className="text-gray-900 font-bold">
+              {selectedConversation.fullName}
+            </span>
           </div>
 
           <Messages />

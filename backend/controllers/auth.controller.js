@@ -35,8 +35,9 @@ export const signup = async (req, res) => {
     });
 
     if (newUser) {
+      console.log(newUser);
       // Generate JWT token here
-      const token = generateTokenAndSetCookie(user._id);
+      const token = generateTokenAndSetCookie(newUser._id);
       await newUser.save();
 
       res.status(201).json({
@@ -50,7 +51,7 @@ export const signup = async (req, res) => {
       res.status(400).json({ error: "Invalid user data" });
     }
   } catch (error) {
-    console.log("Error in signup controller", error.message);
+    console.log("Error in signup controller", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
